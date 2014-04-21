@@ -10,5 +10,5 @@ app.use (req, res) ->
     else
         res.send "You are at a subdomain: " + req.headers.host.split(".")[0]
 
-console.log "App started on http://localhost:3141"
-app.listen 3141
+console.log "App started"
+app.listen Number(process.env.PORT || 3141)
