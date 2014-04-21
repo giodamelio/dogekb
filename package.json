@@ -1,0 +1,8 @@
+{
+  "name": "dogekb",
+  "version": "0.1.0",
+  "description": "A tiny amount of dogecoin for 1kb of hosting.",
+  "author": "Gio d'Amelio",
+  "main": "index.js",
+  "license": "GPLv3"
+}
