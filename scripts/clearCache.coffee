@@ -10,7 +10,7 @@ else
     
 
 # Make our iron-cache instence
-ironCache = new IronCache name, "iron.json"
+ironCache = new IronCache("site_data", process.env.IRON_CACHE_TOKEN, process.env.IRON_CACHE_PROJECT_ID)
 
 ironCache.clear (response) ->
     console.log "Cache Cleared"
