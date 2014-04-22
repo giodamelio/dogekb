@@ -1,5 +1,12 @@
-express = require("express")
+express = require "express"
+
+IronCache = require "./iron-cache"
+
+# Make our express app
 app = express()
+
+# Make our iron-cache instence
+ironCache = new IronCache "site_data", "iron.json"
 
 # Check to see if we are on a subdomain
 app.use (req, res) ->
