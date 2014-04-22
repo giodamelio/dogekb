@@ -1,9 +1,16 @@
+path = require "path"
+
 express = require "express"
+jade = require "jade"
 
 IronCache = require "./iron-cache"
 
 # Make our express app
 app = express()
+
+# Setup our views
+app.set "view engine", "jade"
+app.engine "jade", jade.__express
 
 # Make our iron-cache instence
 ironCache = new IronCache("site_data", process.env.IRON_CACHE_TOKEN, process.env.IRON_CACHE_PROJECT_ID)
@@ -36,7 +43,7 @@ app.use (req, res, next) ->
 
 # If they are not on a subdomain, serve the main site
 app.get "/", (req, res) ->
-    res.send "Main Site Goes Here"
+    res.render "index"
 
 console.log "App started"
 app.listen Number(process.env.PORT || 3141)
