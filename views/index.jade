@@ -1,1 +1,29 @@
-h1 Hello World!
+doctype html
+html(lang="en")
+head
+        title DogeKB
+
+        //- Bootstrap core CSS 
+        link(href="/vendor/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+
+        //- My CSS
+        link(href="/main.css", rel="stylesheet")
+    body
+        div.navbar.navbar-inverse.navbar-fixed-top(role="navigation")
+            div.container
+                div.navbar-header
+                    a.navbar-brand(href="#") DogeKB
+                div.collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        li.active
+                            a(href="#") Home
+                        li
+                            a(href="#about") About
+                        li
+                            a(href="#contact") Contact
+        div.container
+            div.starter-template
+                h1 Hello World!
+
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+        script(src="/vendor/bootstrap/js/bootstrap.min.js")

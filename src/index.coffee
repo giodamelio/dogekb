@@ -12,6 +12,9 @@ app = express()
 app.set "view engine", "jade"
 app.engine "jade", jade.__express
 
+# Serve our static stuff
+app.use express.static(path.resolve(__dirname, "../static"))
+
 # Make our iron-cache instence
 ironCache = new IronCache("site_data", process.env.IRON_CACHE_TOKEN, process.env.IRON_CACHE_PROJECT_ID)
 
