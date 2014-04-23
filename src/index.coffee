@@ -2,11 +2,17 @@ path = require "path"
 
 express = require "express"
 jade = require "jade"
+mongoose = require "mongoose"
+bodyParser = require "body-parser"
 
-IronCache = require "./iron-cache"
+# Get our models
+SiteModel = require "./models/site"
 
 # Make our express app
 app = express()
+
+# Setup some middleware
+app.use bodyParser()
 
 # Setup our views
 app.set "view engine", "jade"
@@ -15,8 +21,8 @@ app.engine "jade", jade.__express
 # Serve our static stuff
 app.use express.static(path.resolve(__dirname, "../static"))
 
-# Make our iron-cache instence
-ironCache = new IronCache("site_data", process.env.IRON_CACHE_TOKEN, process.env.IRON_CACHE_PROJECT_ID)
+# Connect to mongoose
+mongoose.connect process.env.MONGOHQ_URL
 
 # Check to see if we are on a subdomain
 app.use (req, res, next) ->
@@ -34,19 +40,29 @@ app.use (req, res, next) ->
 # If they are on a subdomain, serve their page
 app.use (req, res, next) ->
     if req.subdomain?
-        ironCache.get req.subdomain, (body) ->
-            # If the subdomain is valid, send the data
-            # Otherwise send an error message
-            if body.msg == "Key not found."
-                res.send "Invalid subdomain"
+        SiteModel.findOne
+            subdomain: req.subdomain
+        , (error, site) ->
+            if error then console.log error
+
+            if site?
+                res.send site.content
             else
-                res.send body.value
+                res.send "Invalid subdomain"
     else
         next()
 
 # If they are not on a subdomain, serve the main site
 app.get "/", (req, res) ->
     res.render "index"
+
+app.post "/add", (req, res) ->
+    site = new SiteModel
+        subdomain: req.body.subdomain
+        content: req.body.content
+    site.save (error) ->
+        if error then console.log error
+        res.send "Added"
 
 console.log "App started"
 app.listen Number(process.env.PORT || 3141)
