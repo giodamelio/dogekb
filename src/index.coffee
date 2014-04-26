@@ -64,5 +64,10 @@ app.post "/add", (req, res) ->
         if error then console.log error
         res.send "Added"
 
+# List all the subdomains
+app.get "/list", (req, res) ->
+    SiteModel.find {}, "subdomain content", (error, sites) ->
+        res.send sites
+
 console.log "App started"
 app.listen Number(process.env.PORT || 3141)
