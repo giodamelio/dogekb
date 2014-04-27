@@ -13,7 +13,6 @@ UserSchema = mongoose.Schema
     password:
         type: String
         required: true
-        unique: true
 
 # Replace the plaintext password with bcrypt hash before it is saved
 UserSchema.pre "save", (next) ->

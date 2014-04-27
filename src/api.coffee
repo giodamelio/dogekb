@@ -20,5 +20,5 @@ api.get "/list", (req, res) ->
 
 # List all the users
 api.get "/listusers", (req, res) ->
-    UserModel.find {}, "subdomain content", (error, sites) ->
+    UserModel.find {}, "", (error, sites) ->
         res.send sites
