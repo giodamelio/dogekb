@@ -38,6 +38,8 @@ app.use (req, res, next) ->
 # Handle the sobdomains
 require("./subdomain")(app)
 
+# Handle authentication
+require("./authentication")(app)
 
 # Handle the api
 app.use "/api", require("./api")
