@@ -1,12 +1,10 @@
 path = require "path"
 
 express = require "express"
-jade = require "jade"
-mongoose = require "mongoose"
 bodyParser = require "body-parser"
+jade = require "jade"
 
-# Get our models
-SiteModel = require "./models/site"
+mongoose = require "mongoose"
 
 # Make our express app
 app = express()
@@ -37,37 +35,16 @@ app.use (req, res, next) ->
 
     next()
 
-# If they are on a subdomain, serve their page
-app.use (req, res, next) ->
-    if req.subdomain?
-        SiteModel.findOne
-            subdomain: req.subdomain
-        , (error, site) ->
-            if error then console.log error
+# Handle the sobdomains
+require("./subdomain")(app)
 
-            if site?
-                res.send site.content
-            else
-                res.send "Invalid subdomain"
-    else
-        next()
 
-# If they are not on a subdomain, serve the main site
+# Handle the api
+app.use "/api", require("./api")
+
+# Render the main angularjs site
 app.get "/", (req, res) ->
     res.render "index"
 
-app.post "/add", (req, res) ->
-    site = new SiteModel
-        subdomain: req.body.subdomain
-        content: req.body.content
-    site.save (error) ->
-        if error then console.log error
-        res.send "Added"
-
-# List all the subdomains
-app.get "/list", (req, res) ->
-    SiteModel.find {}, "subdomain content", (error, sites) ->
-        res.send sites
-
 console.log "App started"
-app.listen Number(process.env.PORT || 3141)
+app.listen Number(process.env.PORT or 3141)
