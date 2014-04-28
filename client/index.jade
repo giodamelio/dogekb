@@ -20,9 +20,17 @@ html(lang="en", ng-app="dogekb")
                             a(ui-sref="home") Home
                         li(ng-class="{active: activeState=='contact'}")
                             a(ui-sref="contact") Contact
-                    div.navbar-right.navbar-form
-                        a(ui-sref="login").btn.btn-success.btn-sm Login
-                        a(ui-sref="signup").btn.btn-success.btn-sm Signup
+                    //- Auth Status
+                    div(ng-controller="authStatus")
+                        //- User is not logged in
+                        div(ng-show="!loggedIn")
+                            div.navbar-right.navbar-form
+                                a(ui-sref="login").btn.btn-success.btn-sm Login
+                                a(ui-sref="signup").btn.btn-success.btn-sm Signup
+                        //- User is logged in
+                        div(ng-show="loggedIn")
+                            div.navbar-right.navbar-form
+                                a(ui-sref="login").btn.btn-success.btn-sm You Are Logged In
 
         //- Main Content
         div.container

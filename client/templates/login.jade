@@ -5,11 +5,11 @@ div.col-sm-6.col-sm-offset-3.center
         div.form-group
             label(for="emailInput").col-sm-4.control-label Email
             div.col-sm-8
-                input(type="email", id="emailInput", placeholder="Enter email").form-control
+                input(ng-model="email", type="email", id="emailInput", placeholder="Enter email").form-control
         div.form-group
             label(for="passwordInput").col-sm-4.control-label Password
             div.col-sm-8
-                input(type="password", id="passwordInput", placeholder="Enter password").form-control
+                input(ng-model="password", type="password", id="passwordInput", placeholder="Enter password").form-control
         div.form-group
             div.col-sm-12
-                button.btn.btn-success Login
+                button(ng-click="login()").btn.btn-success Login
