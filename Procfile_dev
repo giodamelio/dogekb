@@ -1,1 +1,1 @@
-web: nodemon server/index.coffee
+web: nodemon -w server/ server/index.coffee
