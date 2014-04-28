@@ -18,14 +18,15 @@ html(lang="en", ng-app="dogekb")
                     ul.nav.navbar-nav
                         li(ng-class="{active: activeState=='home'}")
                             a(ui-sref="home") Home
-                        li(ng-class="{active: activeState=='about'}")
-                            a(ui-sref="about") About
                         li(ng-class="{active: activeState=='contact'}")
                             a(ui-sref="contact") Contact
+                    div.navbar-right.navbar-form
+                        a(ui-sref="login").btn.btn-success.btn-sm Login
+                        a(ui-sref="signup").btn.btn-success.btn-sm Signup
+
         //- Main Content
         div.container
-            div.starter-template
-                div(ui-view)
+            div(ui-view)
 
         //- Angularjs
         script(src="/vendor/angular/angular.min.js")

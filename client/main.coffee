@@ -11,13 +11,17 @@ app.config ($stateProvider, $urlRouterProvider) ->
             url: "/"
             templateUrl: "templates/home.html"
         )
-        .state("about",
-            url: "/about"
-            templateUrl: "templates/about.html"
-        )
         .state("contact",
             url: "/contact"
             templateUrl: "templates/contact.html"
+        )
+        .state("login",
+            url: "/login"
+            templateUrl: "templates/login.html"
+        )
+        .state("signup",
+            url: "/signup"
+            templateUrl: "templates/signup.html"
         )
 
 # Keep the active nav up to date
