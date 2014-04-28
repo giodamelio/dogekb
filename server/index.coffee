@@ -2,7 +2,8 @@ path = require "path"
 
 express = require "express"
 bodyParser = require "body-parser"
-jade = require "jade"
+
+harp = require "harp"
 
 mongoose = require "mongoose"
 
@@ -11,10 +12,6 @@ app = express()
 
 # Setup some middleware
 app.use bodyParser()
-
-# Setup our views
-app.set "view engine", "jade"
-app.engine "jade", jade.__express
 
 # Serve our static stuff
 app.use express.static(path.resolve(__dirname, "../static"))
@@ -27,7 +24,7 @@ app.use (req, res, next) ->
     rootHosts = ["www.dogekb.com", "dogekb.com", "localhost:3141", "www.localhost:3141"]
     if req.headers.host in rootHosts
         # They are visiting the main site
-        # Let the main handler catch it
+        # Let harp handle it
     else
         # They are visiting a subdomain
         # Add a key to the request so we know
@@ -44,9 +41,8 @@ require("./authentication")(app)
 # Handle the api
 app.use "/api", require("./api")
 
-# Render the main angularjs site
-app.get "/", (req, res) ->
-    res.render "index"
+# Serve our client with harp
+app.use harp.mount(path.resolve(__dirname, "../client"))
 
 console.log "App started"
 app.listen Number(process.env.PORT or 3141)
