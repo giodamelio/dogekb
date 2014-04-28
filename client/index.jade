@@ -9,25 +9,27 @@ html(lang="en", ng-app="dogekb")
         //- My CSS
         link(href="/main.css", rel="stylesheet")
     body
-        div.navbar.navbar-inverse.navbar-fixed-top(role="navigation")
+        //- Navbar
+        div(ng-controller="nav").navbar.navbar-inverse.navbar-fixed-top
             div.container
                 div.navbar-header
-                    a.navbar-brand(href="#") DogeKB
+                    a.navbar-brand(ui-sref="home") DogeKB
                 div.collapse.navbar-collapse
                     ul.nav.navbar-nav
-                        li.active
-                            a(href="#") Home
-                        li
-                            a(href="#about") About
-                        li
-                            a(href="#contact") Contact
-        div(ng-controller="helloWorld").container
-            div(ng-class="{red: isRed}").starter-template
-                h1 Hello World!
-                button(ng-click="toggleRedness()") Toggle Redness
+                        li(ng-class="{active: activeState=='home'}")
+                            a(ui-sref="home") Home
+                        li(ng-class="{active: activeState=='about'}")
+                            a(ui-sref="about") About
+                        li(ng-class="{active: activeState=='contact'}")
+                            a(ui-sref="contact") Contact
+        //- Main Content
+        div.container
+            div.starter-template
+                div(ui-view)
 
         //- Angularjs
         script(src="/vendor/angular/angular.min.js")
-
+        //- Angular-ui-router
+        script(src="/vendor/angular-ui-router/angular-ui-router.min.js")
         //- My js
         script(src="/main.js")
