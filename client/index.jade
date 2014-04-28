@@ -29,8 +29,13 @@ html(lang="en", ng-app="dogekb")
                                 a(ui-sref="signup").btn.btn-success.btn-sm Signup
                         //- User is logged in
                         div(ng-show="loggedIn")
-                            div.navbar-right.navbar-form
-                                a(ui-sref="login").btn.btn-success.btn-sm You Are Logged In
+                            div.navbar-right
+                                a.dropdown-toggle.btn.btn-success.btn-sm.navbar-btn
+                                    | {{email}} 
+                                    span.caret
+                                ul.dropdown-menu
+                                    li
+                                        a(ui-sref="logout") Logout
 
         //- Main Content
         div.container
@@ -40,5 +45,7 @@ html(lang="en", ng-app="dogekb")
         script(src="/vendor/angular/angular.min.js")
         //- Angular-ui-router
         script(src="/vendor/angular-ui-router/angular-ui-router.min.js")
+        //- Angular-ui-bootstrap
+        script(src="/vendor/angular-ui-bootstrap/ui-bootstrap-tpls-0.10.0.min.js")
         //- My js
         script(src="/main.js")

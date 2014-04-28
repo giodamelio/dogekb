@@ -30,6 +30,7 @@ module.exports = (app) ->
                     res.json
                         token: token
                         message: "Successfully logged in"
+                        email: user.email
                 else
                     # Wrong password
                     res.json 401, { message: "Incorrect Password" }

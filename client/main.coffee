@@ -1,4 +1,4 @@
-app = angular.module "dogekb", ["ui.router"]
+app = angular.module "dogekb", ["ui.router", "ui.bootstrap"]
 
 # Setup ui-router
 app.config ($stateProvider, $urlRouterProvider, $provide) ->
@@ -17,6 +17,11 @@ app.config ($stateProvider, $urlRouterProvider, $provide) ->
             url: "/login"
             templateUrl: "templates/login.html"
             controller: "login"
+        .state "logout",
+            url: "/logout"
+            onEnter: ($state, authentication) ->
+                authentication.logout()
+                $state.go "home"
         .state "signup",
             url: "/signup"
             templateUrl: "templates/signup.html"
@@ -47,18 +52,23 @@ app.controller "nav", ($scope, $state) ->
 app.controller "authStatus", ($scope) ->
     $scope.loggedIn = false
 
-    $scope.$on "login", ->
+    $scope.$on "login", (event, data) ->
         $scope.loggedIn = true
+        $scope.email = data.email
+
+    $scope.$on "logout", (event) ->
+        $scope.loggedIn = false
+        $scope.email = ""
 
 # Handle the login page
-app.controller "login", ($scope, authentication) ->
+app.controller "login", ($scope, $state, authentication) ->
     $scope.email = "giodamelio@gmail.com"
     $scope.password = "hunter2"
 
     $scope.login = ->
         authentication.login($scope.email, $scope.password)
             .success (value) ->
-                console.log value
+                $state.go "home"
             .error (value) ->
                 console.log value
 
@@ -82,9 +92,9 @@ app.factory "authentication", ($http, $window, $q, $rootScope) ->
                 @isAuthenticated = true
 
                 # Broadcast an event
-                $rootScope.$broadcast "login"
+                $rootScope.$broadcast "login", data
 
-                deferred.resolve "Success"
+                deferred.resolve data
             .error (data, status, headers, config) =>
                 # Erase the token if the user fails to log in
                 delete $window.sessionStorage.token
@@ -92,6 +102,12 @@ app.factory "authentication", ($http, $window, $q, $rootScope) ->
                 # Save status in this service
                 @isAuthenticated = false
 
-                deferred.reject "Fail"
+                deferred.reject data
             return deferred.promise
+        logout: ->
+            # Delete the token
+            delete $window.sessionStorage.token
+
+            # Send an event
+            $rootScope.$broadcast "logout"
     }
