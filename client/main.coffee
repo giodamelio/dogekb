@@ -1,4 +1,4 @@
-app = angular.module "dogekb", ["ui.router", "ui.bootstrap"]
+app = angular.module "dogekb", ["ui.router", "ui.bootstrap", "ngCookies"]
 
 # Setup ui-router
 app.config ($stateProvider, $urlRouterProvider, $provide) ->
@@ -43,6 +43,23 @@ app.config ($stateProvider, $urlRouterProvider, $provide) ->
             return deferred
         return $delegate
 
+app.run ($http, $cookieStore, authentication) ->
+    $http
+        method: "POST"
+        url: "/auth/verify"
+        data:
+            token: $cookieStore.get("token")
+    .success (data, status, headers, config) =>
+        console.log data
+        if data.message == "Token is good"
+            authentication.isAuthenticated true, data
+    .error (data, status, headers, config) =>
+        # Erase the token if the user fails to log in
+        $cookieStore.remove "token"
+
+        # Save status in this service
+        authentication.isAuthenticated false
+
 # Keep the active nav up to date
 app.controller "nav", ($scope, $state) ->
     $scope.$on "$stateChangeSuccess", (event, newState) ->
@@ -73,9 +90,21 @@ app.controller "login", ($scope, $state, authentication) ->
                 console.log value
 
 # Authentication service
-app.factory "authentication", ($http, $window, $q, $rootScope) ->
+app.factory "authentication", ($http, $cookieStore, $q, $rootScope) ->
     return {
-        isAuthenticated: false
+        _isAuthenticated: false
+        isAuthenticated: ->
+            if arguments.length == 0
+                # Getting value
+                return @_isAuthenticated
+            else
+                # Setting value
+                _isAuthenticated = arguments[0]
+
+                if arguments[0]
+                    $rootScope.$broadcast "login", arguments[1]
+                else
+                    $rootScope.$broadcast "logout"
         login: (email, password) ->
             deferred = $q.defer()
             $http
@@ -86,27 +115,24 @@ app.factory "authentication", ($http, $window, $q, $rootScope) ->
                     password: password
             .success (data, status, headers, config) =>
                 # Save the token
-                $window.sessionStorage.token = data.token
+                $cookieStore.put "token", data.token
 
                 # Save status in this service
-                @isAuthenticated = true
-
-                # Broadcast an event
-                $rootScope.$broadcast "login", data
+                @isAuthenticated true, data
 
                 deferred.resolve data
             .error (data, status, headers, config) =>
                 # Erase the token if the user fails to log in
-                delete $window.sessionStorage.token
+                $cookieStore.remove "token"
 
                 # Save status in this service
-                @isAuthenticated = false
+                @isAuthenticated false
 
                 deferred.reject data
             return deferred.promise
         logout: ->
             # Delete the token
-            delete $window.sessionStorage.token
+            $cookieStore.remove "token"
 
             # Send an event
             $rootScope.$broadcast "logout"

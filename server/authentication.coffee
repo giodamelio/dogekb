@@ -3,6 +3,8 @@ jsonwebtoken = require "jsonwebtoken"
 
 UserModel = require "./models/user"
 
+SESSION_TIME = 60 * 5 # 5 Hours
+
 module.exports = (app) ->
     # Protect all the routes under /api
     app.use "/api", expressJwt(secret: process.env.TOKEN_SECRET)
@@ -25,7 +27,7 @@ module.exports = (app) ->
                     # Account it good
 
                     # Sign our token and set it to expire in 5 hours
-                    token = jsonwebtoken.sign({ email: user.email }, process.env.TOKEN_SECRET, { expiresInMinutes: 60 * 5 })
+                    token = jsonwebtoken.sign({ email: user.email }, process.env.TOKEN_SECRET, { expiresInMinutes: SESSION_TIME })
 
                     res.json
                         token: token
@@ -49,8 +51,19 @@ module.exports = (app) ->
                     return
 
             # Sign our token and set it to expire in 5 hours
-            token = jsonwebtoken.sign({ email: req.body.email }, process.env.TOKEN_SECRET, { expiresInMinutes: 60 * 5 })
+            token = jsonwebtoken.sign({ email: req.body.email }, process.env.TOKEN_SECRET, { expiresInMinutes: SESSION_TIME })
 
             res.json
                 token: token
                 message: "User successfully created"
+
+    # Verify a token
+    app.post "/auth/verify", (req, res) ->
+        if req.body.token
+            jsonwebtoken.verify req.body.token, process.env.TOKEN_SECRET, (error, decoded) ->
+                if error
+                    res.json 401, { message: "Token not valid" }
+                else
+                    res.json 200, { message: "Token is valid" , email: decoded.email }
+        else
+            res.json 401, { message: "No token sent" }
