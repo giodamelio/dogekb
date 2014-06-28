@@ -1,0 +1,17 @@
+{
+  "name": "dogekb",
+  "version": "0.1.0",
+  "description": "1kb of hosting for dogecoin",
+  "author": "Gio d'Amelio",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/giodamelio/dogekb.git"
+  },
+  "bugs": {
+    "url": "https://github.com/giodamelio/dogekb/issues"
+  },
+  "homepage": "https://github.com/giodamelio/dogekb"
+}
