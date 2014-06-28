@@ -5,6 +5,9 @@
   "author": "Gio d'Amelio",
   "private": true,
   "main": "index.js",
+  "dependencies": {
+      "express": "^4.4.5"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
