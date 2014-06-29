@@ -5,6 +5,9 @@ var expressSubdomainHandler = require("express-subdomain-handler");
 
 var app = express();
 
+// Serve static files
+app.use(express.static(__dirname + "/public"));
+
 // Map subdomains to routes
 app.use(expressSubdomainHandler({
     baseUrl: "localhost.com:3141",
