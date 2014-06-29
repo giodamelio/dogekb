@@ -5,6 +5,10 @@ var expressSubdomainHandler = require("express-subdomain-handler");
 
 var app = express();
 
+// Setup jade
+app.set("view engine", "jade");
+app.set("views", __dirname + "/views");
+
 // Serve static files
 app.use(express.static(__dirname + "/public"));
 
@@ -21,7 +25,7 @@ app.get("/subdomain/:subdomain", function(req, res) {
 
 // Homepage
 app.get("/", function(req, res) {
-    res.send("Hello World!!!");
+    res.render("index");
 });
 
 // Invalid subdomain
