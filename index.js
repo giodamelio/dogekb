@@ -35,7 +35,7 @@ app.get("/invalid", function(req, res) {
 
 // Page not found
 app.use(function(req, res, next) {
-    res.send("404 Page not found");
+    res.render("error", { code: 404, error: "Page not found" });
 });
 
 var port = Number(process.env.PORT || 3141);
