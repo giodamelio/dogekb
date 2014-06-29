@@ -26,6 +26,11 @@ app.get("/invalid", function(req, res) {
     res.send("Invalid subdomain");
 });
 
+// Page not found
+app.use(function(req, res, next) {
+    res.send("404 Page not found");
+});
+
 var port = Number(process.env.PORT || 3141);
 app.listen(port, function() {
     console.log("App running on port", port);
