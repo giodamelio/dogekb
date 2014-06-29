@@ -8,6 +8,9 @@ var app = express();
 app.set("view engine", "jade");
 app.set("views", path.resolve(__dirname, "../views"));
 
+// Pass our base url to jade
+app.locals.baseUrl = process.env.DOMAIN_PREFIX;
+
 // Serve static files
 app.use(express.static(path.resolve(__dirname, "../public")));
 
