@@ -1,7 +1,6 @@
 var path = require("path");
 
 var express = require("express");
-var expressSubdomainHandler = require("express-subdomain-handler");
 
 var app = express();
 
@@ -11,6 +10,15 @@ app.set("views", path.resolve(__dirname, "../views"));
 
 // Serve static files
 app.use(express.static(path.resolve(__dirname, "../public")));
+
+// Modify req.redirect so it sends to root domain
+app.use(function(req, res, next) {
+    res.redirectOld = res.redirect;
+    res.redirect = function(url) {
+        res.redirectOld(process.env.DOMAIN_PREFIX + url);
+    };
+    next();
+});
 
 // Handle subdomains
 app.use(require("./subdomain"));

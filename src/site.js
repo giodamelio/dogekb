@@ -9,11 +9,15 @@ app.get("/", function(req, res) {
 
 // Invalid subdomain
 app.get("/invalid", function(req, res) {
-    res.send("Invalid subdomain");
+    res.render("error", { code: "", error: "Invalid subdomain" });
 });
 
-// Page not found
+// Catch errors
 app.use(function(req, res, next) {
-    res.render("error", { code: 404, error: "Page not found" });
+    if (req.subdomains.length > 1) {
+        res.redirect("/invalid");
+    } else {
+        res.render("error", { code: 404, error: "Page not found" });
+    }
 });
 
