@@ -26,8 +26,8 @@ app.use(function(req, res, next) {
 // Handle subdomains
 app.use(require("./subdomain"));
 
-// Handle site
-app.use(require("./site"));
+// Handle homepage
+app.use(require("./homepage"));
 
 var port = Number(process.env.PORT || 3141);
 app.listen(port, function() {
