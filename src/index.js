@@ -29,6 +29,18 @@ app.use(require("./subdomain"));
 // Handle homepage
 app.use(require("./homepage"));
 
+// Handle api
+app.use("/api", require("./api"));
+
+// Handle errors
+app.use(function(req, res, next) {
+    if (req.subdomains.length > 1) {
+        res.redirect("/invalid");
+    } else {
+        res.render("error", { code: 404, error: "Page not found" });
+    }
+});
+
 var port = Number(process.env.PORT || 3141);
 app.listen(port, function() {
     console.log("App running on port", port);
