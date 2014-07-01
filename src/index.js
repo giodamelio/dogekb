@@ -1,12 +1,21 @@
 var path = require("path");
 
 var express = require("express");
+var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 
+// Connect to the database
+mongoose.connect(process.env.MONGOHQ_URL);
+
+// Create our appp
 var app = express();
 
 // Setup jade
 app.set("view engine", "jade");
 app.set("views", path.resolve(__dirname, "../views"));
+
+// Helpful middleware
+app.use(bodyParser.json());
 
 // Pass our base url to jade
 app.locals.baseUrl = process.env.DOMAIN_PREFIX;
